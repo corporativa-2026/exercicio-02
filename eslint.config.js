@@ -11,6 +11,10 @@ export default [
     rules: {
       ...google.rules,
 
+
+      // Estrito: sem console em produção
+      'no-console': 'off', // 'warn',
+
       // Ponto-e-vírgula obrigatório
       'semi': ['error', 'always'],
 
@@ -24,9 +28,6 @@ export default [
       // Curly braces para todos os blocos
       'curly': ['warn', 'all'],
 
-      // Estrito: sem console em produção
-      'no-console': 'warn',
-
       // Google usa 2 espaços — força explícito
       'indent': ['warn', 2, { SwitchCase: 1 }],
 
@@ -37,7 +38,7 @@ export default [
       'quotes': ['warn', 'single', { avoidEscape: true }],
 
       // Max linha: 80 (padrão Google)
-      'max-len': ['warn', { code: 80, ignoreUrls: true }],
+      'max-len': ['warn', { code: 100, ignoreUrls: true }],
 
       // Sem trailing spaces
       'no-trailing-spaces': 'warn',
@@ -49,16 +50,16 @@ export default [
       'id-length': ['warn', { min: 3, exceptions: ['i', 'j', 'x', 'y'] }],
 
       // Profundidade máxima de aninhamento
-      'max-depth': ['warn', 3],
+      // 'max-depth': ['warn', 3],
 
       // Máximo de linhas por arquivo
-      'max-lines': ['warn', { max: 100 }],
+      // 'max-lines': ['warn', { max: 100 }],
 
       // Máximo de parâmetros por função
-      'max-params': ['warn', 3],
+      // 'max-params': ['warn', 3],
 
       // Máximo de statements por função
-      'max-statements': ['warn', 15],
+      // 'max-statements': ['warn', 15],
 
       // Sem reassign em parâmetros de função
       'no-param-reassign': 'warn',

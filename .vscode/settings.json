@@ -10,5 +10,8 @@
         "**/node_modules": true,
         "**/dist": true
     },
-    "editor.renderWhitespace": "boundary"
+    "editor.renderWhitespace": "boundary",
+    "editor.rulers": [
+        100
+    ]
 }
