@@ -1,4 +1,5 @@
 import { novoATM } from './atm.js';
+// Automatic Teller Machine -> Caixa Eletrônico
 
 // criando um novo ATM com número de série 2344499,
 // gavetas para cédulas de 10, 20, 50 e 100 reais,
@@ -6,12 +7,12 @@ import { novoATM } from './atm.js';
 const atm = novoATM(2344499, [10, 20, 50, 100], 500);
 
 console.log(atm.numeroSerie); // 2344499
-
 // não deve permitir alteração do número de série, comente a linha abaixo para evitar o erro
-atm.numeroSerie = 34883444;
+// atm.numeroSerie = 34883444;
 
 // mesmo número de série, pois a alteração não é permitida
 console.log(atm.numeroSerie); // 2344499
+
 
 // o ATM não tem dinheiro no início
 console.log(atm.valor); // 0
@@ -22,6 +23,8 @@ console.log(atm.cedulas(20)); // 0
 console.log(atm.cedulas(50)); // 0
 console.log(atm.cedulas(100)); // 0
 console.log(atm.cedulas(200)); // undefined, pois não existe gaveta para cédulas de 200 reais
+
+/*
 
 // o ATM tem gavetas de 10, 20, 50 e 100 reais, mas não tem gavetas de outros valores
 console.log(atm.gavetas.length); // 4
@@ -138,3 +141,4 @@ console.log(atm2.valor); // 40 = 2 * 20
 atm3.retirarValor(150); // não há cédulas suficientes para atender o valor solicitado
 console.log(atm3.cedulas(100)); // 2
 console.log(atm3.valor); // 200
+*/
