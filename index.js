@@ -1,6 +1,9 @@
 import { novoATM } from './atm.js';
 
-const atm = novoATM(2344499, [10, 20, 50, 100]);
+// criando um novo ATM com número de série 2344499,
+// gavetas para cédulas de 10, 20, 50 e 100 reais,
+// cada com capacidade máxima de 500 cédulas
+const atm = novoATM(2344499, [10, 20, 50, 100], 500);
 
 console.log(atm.numeroSerie); // 2344499
 
@@ -18,6 +21,7 @@ console.log(atm.cedulas(10)); // 0
 console.log(atm.cedulas(20)); // 0
 console.log(atm.cedulas(50)); // 0
 console.log(atm.cedulas(100)); // 0
+console.log(atm.cedulas(200)); // undefined, pois não existe gaveta para cédulas de 200 reais
 
 // o ATM tem gavetas de 10, 20, 50 e 100 reais, mas não tem gavetas de outros valores
 console.log(atm.gavetas.length); // 4
@@ -29,7 +33,7 @@ atm.gavetas = [5, 10, 20, 50, 100];
 // as gavetas continuam as mesmas
 console.log(atm.gavetas); // [ 10, 20, 50, 100 ]
 
-// abastecendo com 33 cédulas( de 100
+// abastecendo com 33 cédulas de 100
 atm.abastecerCedulas(33, 100);
 
 // verificando a quantidade de cédulas de 100, espera-se 33 cédulas
@@ -40,13 +44,13 @@ console.log(atm.cedulas(10)); // 0
 console.log(atm.cedulas(20)); // 0
 console.log(atm.cedulas(50)); // 0
 
-// cédulas de valor não existente devem retornar 0
-console.log(atm.cedulas(5)); // 0
+// cédulas de valor não existente devem retornar undefined
+console.log(atm.cedulas(5)); // undefined
 
 // abastecimento de cédulas não existentes são rejeitados explicitamente
 try {
   atm.abastecerCedulas(8, 3); // 8 cédulas de R$ 3,00
-} catch (erro) {
+} catch (erro) { // use throw new Error('mensagem de erro') para lançar um erro personalizado
   console.log(erro); // Não existem cédulas de 3 reais
 }
 
@@ -55,22 +59,31 @@ console.log(atm.valor); // 33 * 100 = 3300 reais
 
 // retirada rejeitada por não haver cédulas de valor solicitado (R$ 50,00)
 atm.retirarValor(350); // não há cédulas de R$ 50,00, apenas não efetua, sem erros
+// a operação retorna um array de cédulas retiradas,
+// mas como não há cédulas de 50 reais, o array é vazio
+console.log(atm.retirarValor(350)); // []
+
 console.log(atm.cedulas(100)); // 33
 console.log(atm.valor); // 3300
 
 // retirada válida
-atm.retirarValor(300); // 3 cédulas de 100
+const retirada1 = atm.retirarValor(300); // 3 cédulas de 100
 console.log(atm.cedulas(100)); // 30
+console.log(retirada1); // [ 100, 100, 100 ]
 console.log(atm.valor); // 3000
 
 // retirada rejeitada por não haver cédulas suficientes para atender o valor solicitado
-atm.retirarValor(3100); // não há cédulas suficientes
+const retirada2 = atm.retirarValor(3100); // não há cédulas suficientes
 console.log(atm.cedulas(100)); // 30
+console.log(retirada2); // []
 console.log(atm.valor); // 3000
 
 // retirada válida
-atm.retirarValor(3000); // vai esvaziar o ATM
+// vai esvaziar o ATM, retirando as 30 cédulas de 100 reais restantes
+const retirada3 = atm.retirarValor(3000);
 console.log(atm.cedulas(100)); // 0
+console.log(retirada3); // 30 x 100 = [ 100, ... 28x100 ..., 100 ]
+console.log(retirada3.length); // 30
 console.log(atm.valor); // 0
 
 // abastecimento de R$ 50,00 e R$ 10,00
@@ -81,16 +94,21 @@ console.log(atm.cedulas(50)); // 10
 console.log(atm.valor); // 600 = 10 * 10 + 10 * 50
 
 // retirada prioriza cédulas de maior valor
-atm.retirarValor(100); // retira 2 cédulas de R$ 50,00 em vez de 10 cédulas de R$ 10,00
+const retirada4 = atm.retirarValor(100); // retira 2 cédulas de R$ 50,00 em vez de 10 x R$ 10,00
 console.log(atm.cedulas(10)); // 10
 console.log(atm.cedulas(50)); // 8
+console.log(retirada4); // [ 50, 50 ]
 console.log(atm.valor); // 500 = 10 * 10 + 8 * 50
 
 // retirada combinada
-atm.retirarValor(90); // 1 cédula de R$ 50,00 e 4 cédulas de R$ 10,00
+const retirada5 = atm.retirarValor(90); // 1 cédula de R$ 50,00 e 4 cédulas de R$ 10,00
 console.log(atm.cedulas(10)); // 6
 console.log(atm.cedulas(50)); // 7
+console.log(retirada5); // [ 50, 10, 10, 10, 10 ]
 console.log(atm.valor); //  410 = 6 * 10 + 7 * 50
+
+// consulta sem parâmetros retorna um objeto com a quantidade de cédulas de cada valor
+console.log(atm.cedulas()); // { '10': 6, '50': 7 }
 
 // ---------------------------------------------------
 // escrever um atm.test.js para incluir os casos de teste acima
